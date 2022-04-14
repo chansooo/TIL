@@ -649,3 +649,39 @@
     - semsignal(rsem)을 통해 풀어줌
     - semsignal(z)를 통해 풀어줌
     - 9:00
+    
+
+### 큐 상태
+
+- reader만 존재
+    - wsem만 set
+    - 큐에 아무것도 없음
+- writer만 존재
+    - wsem, rsem이 set
+    - writer들은 wsem 큐에 있음
+- reader와 writer둘 다 존재
+    - read가 먼저일 때
+        - wsem이 reader로부터 set
+        - rsem이 writer로부터 set
+        - 모든 writer들은 wsem에 있다
+        - 하나의 reader은 rsem에 있다
+        - 다른 나머지 reader들은 z에 있다
+    - writer가 먼저일 때
+        - wsem이 writer에 의해 set
+        - rsem이 writer에 의해 set
+        - writer는 wsem에 있다
+        - 하나의 reader은 rsem에 있다
+        - 다른 나머지 reader들은 z에 있다
+
+### 생성자소비자문제: Message Passing 이용
+
+![Screen Shot 2022-04-14 at 9.58.30 PM.png](Concurrenc%20a69fb/Screen_Shot_2022-04-14_at_9.58.30_PM.png)
+
+- finished, writerequest, readrequest 세개의 mailbox
+- 세 개중 안 비어있는 곳이 있다? → 받고 count - -
+- 그리고 msg.id에 해당하는 애에 보내줌.
+- 해당하는 reader가 그걸 받으면 처리함
+- 그리고 나서 finish날려줌
+- 그러면 finish를 받아서 count 를 ++해줌. (끝났구나!)
+- writer
+    - send(writerrequest날림) → receive(답장 기다림) → send(finish날림)
