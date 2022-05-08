@@ -1,4 +1,3 @@
-# Ch05-22S-2
 
 ### Mutual Exclusion의 요구사항
 
